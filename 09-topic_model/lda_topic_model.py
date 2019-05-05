@@ -1,5 +1,7 @@
 import math
 import random
+from tqdm import tqdm
+
 
 K = 2
 alpha = 0.001
@@ -32,11 +34,9 @@ def addCounts(word, topic, doc_id, add_count):
     mapAddCounts(ycounts, '{}|{}'.format(topic, doc_id), add_count)
 
 
-def main():
+def main(in_f):
     # Initialize
     vocabs = []
-    # in_f = './data/wiki-en-documents.word'
-    in_f = './data/07-train.txt'
     with open(in_f, 'r') as fin:
         lines = fin.readlines()
         for doc_id, line in enumerate(lines):
@@ -53,8 +53,8 @@ def main():
     vocabs = set(vocabs)
 
     # Samples
-    N = 10000
-    for _ in range(N):
+    N = 1000
+    for _ in tqdm(range(N)):
         ll = 0
         for i, words in enumerate(xcorpus): # i: doc_id
             for j, x in enumerate(words): # j: word_pos
@@ -84,9 +84,11 @@ def main():
                         den = beta * K 
                     p_k_Y =  num / den
 
+                    # その単語xの生起確率を計算する
                     prob = p_x_k * p_k_Y # P(x|k) * P(k|Y): 単語確率 x トピック確率
                     probs.append(prob)
 
+                # 単語xに対して新しくサンプルしたトピックnew_yを割り当てる
                 new_y = sampleOne(probs)
                 ll -= math.log(probs[new_y])
                 addCounts(x, new_y, i, 1)
@@ -101,4 +103,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # in_f = './data/wiki-en-documents.word'
+    in_f = './data/07-train.txt'
+    main(in_f)
