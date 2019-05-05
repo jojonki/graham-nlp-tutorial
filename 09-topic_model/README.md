@@ -21,3 +21,12 @@ P(mom,son) = 0.278 (2776/10000)
 P(fat,dag) = 0.111 (1107/10000)
 P(fat,son) = 0.061 (614/10000)
 ```
+
+
+## Topic modeling
+```
+$ python lda_topic_model.py
+a(1) b(1) c(1) d(1)
+e(0) f(0) g(0) h(0)
+a(1) b(1) e(0) f(0)
+```
